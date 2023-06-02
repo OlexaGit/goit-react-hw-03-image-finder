@@ -1,18 +1,15 @@
+import React, { Component } from 'react';
+import Loader from './Loader/Loader';
+import Searchbar from './Searchbar/Searchbar';
 import css from './App.module.css';
 
-export const App = () => {
-  return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101',
-      }}
-    >
-      {/* Ось рекомендації до 3ДЗ. 
+export class App extends Component {
+  render() {
+    return (
+      <div className={css.App}>
+        <Searchbar />
+        <Loader />
+        {/* Ось рекомендації до 3ДЗ. 
       Image Finger: Вся основна логіка повинна бути в Арр 
       Використовувати componentDidUpdate і робити запит на бекенд потрібно в Арр 
       Достатньо однієї умови для запиту 
@@ -23,7 +20,7 @@ export const App = () => {
       Один із варіантів реалізації приховування кнопки 
       “Load more” this.steState(prev =>({ images: [...prev.images, ...hits], loadMore: this.state.page < Math.ceil(totalHits / 12 ) })) 
       Не забуваємо коректно опрацьовувати слухача для клавіатури в компоненті модального вікна. */}
-      React homework template
-    </div>
-  );
-};
+      </div>
+    );
+  }
+}
