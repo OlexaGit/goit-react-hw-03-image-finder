@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { ImSearch } from 'react-icons/im';
-import css from './Searchbar.module.css';
+import css from './SearchForm.module.css';
 // import css from './SearchForm.module.css';
 
 class Searchbar extends Component {
@@ -32,8 +32,8 @@ class Searchbar extends Component {
       //     onChange={this.handlesearchChange}
       //   />
       // </form>
-      <header className={css.searchbar}>
-        <form className={css.form} onSubmit={this.handleSubmit}>
+      <header className={css.Searchbar}>
+        <form className={css.SearchForm} onSubmit={this.handleSubmit}>
           <button type="submit" className={css.button}>
             <span className={css.buttonLabel}>
               <ImSearch />
