@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { ImSearch } from 'react-icons/im';
+import Notiflix from 'notiflix';
 import css from './SearchForm.module.css';
 
 class Searchbar extends Component {
@@ -14,7 +15,12 @@ class Searchbar extends Component {
 
   handleSubmit = evt => {
     evt.preventDefault();
-    console.log(this.state.searchInput);
+    if (this.state.searchInput.trim() === '') {
+      Notiflix.Notify.warning('😪 Search images and photos.');
+      return;
+    }
+
+    this.props.onSubmitSearchInput(this.state.searchInput);
     this.setState({ searchInput: '' });
   };
 
@@ -33,8 +39,8 @@ class Searchbar extends Component {
             name="searchInput"
             value={this.state.searchInput}
             onChange={this.handlesearchChange}
-            autocomplete="off"
-            autofocus
+            // autocomplete="off"
+            // autofocus
             placeholder="Search images and photos"
           />
         </form>
