@@ -1,9 +1,37 @@
 import React, { Component } from 'react';
 import Loader from './Loader/Loader';
+import axios from 'axios';
 import Searchbar from './Searchbar/Searchbar';
 import css from './App.module.css';
 
 export class App extends Component {
+  state = {
+    gallery: [],
+    searchQuery: '',
+    totalPages: 1,
+    lengthArray: 0,
+    isBtnVisible: false,
+    page: 1,
+  };
+
+  async componentDidMount() {
+    const per_page = 40;
+    const myApiKey = '35687240-9029e9ca17f641307dafe05a9';
+    const imageType = 'photo';
+    const orientation = 'horizontal';
+    const safesearch = 'true';
+
+    try {
+      const { data } = await axios.get(
+        `https://pixabay.com/api/?key=${myApiKey}&q=${this.state.searchInput}&image_type=${imageType}&orientation=${orientation}&safesearch=${safesearch}&page=${this.state.page}&per_page=${per_page}`
+      );
+      console.log(data);
+      console.log(this.state.searchInput);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   render() {
     return (
       <div className={css.App}>
