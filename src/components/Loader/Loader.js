@@ -1,9 +1,10 @@
 import React from 'react';
 import { Blocks } from 'react-loader-spinner';
+import css from './Loader.module.css';
 
 const Loader = () => {
   return (
-    <>
+    <div className={css.loader}>
       <Blocks
         visible={true}
         height="80"
@@ -12,7 +13,7 @@ const Loader = () => {
         wrapperStyle={{}}
         wrapperClass="blocks-wrapper"
       />
-    </>
+    </div>
   );
 };
 
