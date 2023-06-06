@@ -12,7 +12,8 @@ export class App extends Component {
     searchInput: '',
     // totalPages: 1,
     // lengthArray: 0,
-    // isBtnVisible: false,
+    isBtnVisible: false,
+    isLoaderVisible: false,
     page: 1,
   };
 
@@ -22,8 +23,10 @@ export class App extends Component {
       this.state.page !== prevState.page
     ) {
       try {
+        this.setState({ isLoaderVisible: true });
         const gallery = await getGallery(this.state.searchInput);
         this.setState({ gallery });
+        this.setState({ isLoaderVisible: false });
       } catch (error) {
         console.error(error);
       }
@@ -35,14 +38,13 @@ export class App extends Component {
   };
 
   render() {
-    // console.log(this.state.gallery);
-    // const { gallery } = this.state;
     return (
       <div className={css.App}>
         <Searchbar onSubmitSearchInput={this.handleFormSubmit} />
+        {this.state.isLoaderVisible && <Loader />}
         <ImageGallery onGallery={this.state.gallery} />
-        <Loader />
-        <Button />
+
+        {this.state.isBtnVisible && <Button />}
 
         {/* Ось рекомендації до 3ДЗ. 
             Image Finger: Вся основна логіка повинна бути в Арр 
