@@ -1,18 +1,22 @@
 import React, { Component } from 'react';
+import Notiflix from 'notiflix';
 import Loader from './Loader/Loader';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
 import Button from './Button/Button';
 import { getGallery } from './Api/JsonPixabayApi';
 import css from './App.module.css';
+import ErrorWrapper from './Page/ErrorWrapper';
 
 export class App extends Component {
   state = {
     gallery: [],
     searchInput: '',
-    // totalPages: 1,
+    isError: false,
+    total: 0,
+    totalHits: 0,
     // lengthArray: 0,
-    isBtnVisible: false,
+    isBtnVisible: true,
     isLoaderVisible: false,
     page: 1,
   };
@@ -24,17 +28,60 @@ export class App extends Component {
     ) {
       try {
         this.setState({ isLoaderVisible: true });
-        const gallery = await getGallery(this.state.searchInput);
-        this.setState({ gallery });
-        this.setState({ isLoaderVisible: false });
+        const data = await getGallery(this.state.searchInput, this.state.page);
+        const gallery = data.hits;
+
+        this.setState(prevState => ({
+          gallery: [...prevState.gallery, ...gallery],
+          total: data.total,
+          totalHits: data.totalHits,
+        }));
+
+        // this.setState({
+        //   gallery: [this.state.gallery, ...gallery],
+        //   total: data.total,
+        //   totalHits: data.totalHits,
+        // });
+
+        // renderButton();
+        console.log(this.state.totalHits);
+
+        // if (this.state.totalHits > 12) {
+        //   this.setState({ isBtnVisible: true });
+        // }
+        // console.log(prevState.lengthArray);
+        // if (prevState.lengthArray === 0) {
+        //   Notiflix.Notify.info('Nothing found!');
+        //   console.log('nothing found');
+        // }
       } catch (error) {
+        this.setState({ isError: true });
         console.error(error);
+      } finally {
+        this.setState({ isLoaderVisible: false });
       }
     }
   }
 
+  renderButton = () => {
+    if (this.state.totalHits > 12) {
+      this.setState({ isBtnVisible: true });
+    }
+    // console.log(prevState.lengthArray);
+    if (this.state.totalHits === 0) {
+      Notiflix.Notify.info('Nothing found!');
+      console.log('nothing found');
+    }
+  };
+
   handleFormSubmit = searchInput => {
     this.setState({ searchInput, page: 1 });
+  };
+
+  LoadMoreGallery = () => {
+    let nextPage = this.state.page;
+    this.setState({ page: nextPage + 1 });
+    console.log('page:', this.state.page);
   };
 
   render() {
@@ -42,10 +89,14 @@ export class App extends Component {
       <div className={css.App}>
         <Searchbar onSubmitSearchInput={this.handleFormSubmit} />
         {this.state.isLoaderVisible && <Loader />}
-        <ImageGallery onGallery={this.state.gallery} />
 
-        {this.state.isBtnVisible && <Button />}
+        <ErrorWrapper isError={this.state.isError}>
+          <ImageGallery onGallery={this.state.gallery} />
 
+          {this.state.isBtnVisible && (
+            <Button onLoadMore={this.LoadMoreGallery} />
+          )}
+        </ErrorWrapper>
         {/* Ось рекомендації до 3ДЗ. 
             Image Finger: Вся основна логіка повинна бути в Арр 
             Використовувати componentDidUpdate і робити запит на бекенд потрібно в Арр 

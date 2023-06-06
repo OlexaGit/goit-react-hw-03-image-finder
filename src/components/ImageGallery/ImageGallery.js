@@ -9,7 +9,7 @@ class ImageGallery extends Component {
 
   render() {
     const { onGallery } = this.props;
-    console.log(onGallery);
+    // console.log(onGallery);
     return (
       <ul className={css.ImageGallery}>
         {onGallery.map(({ id, webformatURL }) => (
