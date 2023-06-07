@@ -61,6 +61,9 @@ export class App extends Component {
     console.log('totalHits:', this.state.totalHits);
 
     const { isLoaderVisible, isError, gallery, totalHits } = this.state;
+    const LoadMore = this.state.page < Math.ceil(totalHits / 12);
+
+    console.log('LoadMore====', LoadMore);
 
     return (
       <div className={css.App}>
@@ -70,7 +73,7 @@ export class App extends Component {
         <ErrorWrapper isError={isError}>
           <ImageGallery onGallery={gallery} />
 
-          {totalHits > 12 && <Button onLoadMore={this.LoadMoreGallery} />}
+          {LoadMore && <Button onLoadMore={this.LoadMoreGallery} />}
           {totalHits === 0 && <Info />}
         </ErrorWrapper>
         {/* Ось рекомендації до 3ДЗ. 
