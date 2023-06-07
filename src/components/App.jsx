@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Notiflix from 'notiflix';
 import Loader from './Loader/Loader';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
@@ -7,6 +6,7 @@ import Button from './Button/Button';
 import { getGallery } from './Api/JsonPixabayApi';
 import css from './App.module.css';
 import ErrorWrapper from './Page/ErrorWrapper';
+import Info from './Info/Info';
 
 export class App extends Component {
   state = {
@@ -14,9 +14,7 @@ export class App extends Component {
     searchInput: '',
     isError: false,
     total: 0,
-    totalHits: 0,
-    // lengthArray: 0,
-    isBtnVisible: true,
+    totalHits: 1,
     isLoaderVisible: false,
     page: 1,
   };
@@ -36,24 +34,6 @@ export class App extends Component {
           total: data.total,
           totalHits: data.totalHits,
         }));
-
-        // this.setState({
-        //   gallery: [this.state.gallery, ...gallery],
-        //   total: data.total,
-        //   totalHits: data.totalHits,
-        // });
-
-        // renderButton();
-        console.log(this.state.totalHits);
-
-        // if (this.state.totalHits > 12) {
-        //   this.setState({ isBtnVisible: true });
-        // }
-        // console.log(prevState.lengthArray);
-        // if (prevState.lengthArray === 0) {
-        //   Notiflix.Notify.info('Nothing found!');
-        //   console.log('nothing found');
-        // }
       } catch (error) {
         this.setState({ isError: true });
         console.error(error);
@@ -63,19 +43,12 @@ export class App extends Component {
     }
   }
 
-  renderButton = () => {
-    if (this.state.totalHits > 12) {
-      this.setState({ isBtnVisible: true });
-    }
-    // console.log(prevState.lengthArray);
-    if (this.state.totalHits === 0) {
-      Notiflix.Notify.info('Nothing found!');
-      console.log('nothing found');
-    }
-  };
-
   handleFormSubmit = searchInput => {
-    this.setState({ searchInput, page: 1 });
+    this.setState({
+      searchInput,
+      page: 1,
+      gallery: [],
+    });
   };
 
   LoadMoreGallery = () => {
@@ -85,17 +58,20 @@ export class App extends Component {
   };
 
   render() {
+    console.log('totalHits:', this.state.totalHits);
+
+    const { isLoaderVisible, isError, gallery, totalHits } = this.state;
+
     return (
       <div className={css.App}>
         <Searchbar onSubmitSearchInput={this.handleFormSubmit} />
-        {this.state.isLoaderVisible && <Loader />}
+        {isLoaderVisible && <Loader />}
 
-        <ErrorWrapper isError={this.state.isError}>
-          <ImageGallery onGallery={this.state.gallery} />
+        <ErrorWrapper isError={isError}>
+          <ImageGallery onGallery={gallery} />
 
-          {this.state.isBtnVisible && (
-            <Button onLoadMore={this.LoadMoreGallery} />
-          )}
+          {totalHits > 12 && <Button onLoadMore={this.LoadMoreGallery} />}
+          {totalHits === 0 && <Info />}
         </ErrorWrapper>
         {/* Ось рекомендації до 3ДЗ. 
             Image Finger: Вся основна логіка повинна бути в Арр 
