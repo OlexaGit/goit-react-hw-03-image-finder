@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import Loader from './Loader/Loader';
 import Searchbar from './Searchbar/Searchbar';
 import ImageGallery from './ImageGallery/ImageGallery';
@@ -72,3 +73,13 @@ export class App extends Component {
     );
   }
 }
+App.propTypes = {
+  state: PropTypes.shape({
+    gallery: PropTypes.arrayOf(PropTypes.string.isRequired),
+    searchInput: PropTypes.string.isRequired,
+    totalHits: PropTypes.number.isRequired,
+    page: PropTypes.number.isRequired,
+    isError: PropTypes.bool.isRequired,
+    isLoaderVisible: PropTypes.bool.isRequired,
+  }),
+};

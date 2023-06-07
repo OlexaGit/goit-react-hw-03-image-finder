@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { ImSearch } from 'react-icons/im';
 import Notiflix from 'notiflix';
 import css from './SearchForm.module.css';
@@ -47,4 +48,9 @@ class Searchbar extends Component {
     );
   }
 }
+Searchbar.propTypes = {
+  state: PropTypes.shape({
+    searchInput: PropTypes.string.isRequired,
+  }),
+};
 export default Searchbar;
