@@ -13,7 +13,6 @@ export class App extends Component {
     gallery: [],
     searchInput: '',
     isError: false,
-    total: 0,
     totalHits: 1,
     isLoaderVisible: false,
     page: 1,
@@ -31,7 +30,6 @@ export class App extends Component {
 
         this.setState(prevState => ({
           gallery: [...prevState.gallery, ...gallery],
-          total: data.total,
           totalHits: data.totalHits,
         }));
       } catch (error) {
@@ -54,16 +52,11 @@ export class App extends Component {
   LoadMoreGallery = () => {
     let nextPage = this.state.page;
     this.setState({ page: nextPage + 1 });
-    console.log('page:', this.state.page);
   };
 
   render() {
-    console.log('totalHits:', this.state.totalHits);
-
-    const { isLoaderVisible, isError, gallery, totalHits } = this.state;
-    const LoadMore = this.state.page < Math.ceil(totalHits / 12);
-
-    console.log('LoadMore====', LoadMore);
+    const { isLoaderVisible, isError, gallery, totalHits, page } = this.state;
+    const LoadMore = page < Math.ceil(totalHits / 12);
 
     return (
       <div className={css.App}>
@@ -72,21 +65,9 @@ export class App extends Component {
 
         <ErrorWrapper isError={isError}>
           <ImageGallery onGallery={gallery} />
-
           {LoadMore && <Button onLoadMore={this.LoadMoreGallery} />}
           {totalHits === 0 && <Info />}
         </ErrorWrapper>
-        {/* Ось рекомендації до 3ДЗ. 
-            Image Finger: Вся основна логіка повинна бути в Арр 
-            Використовувати componentDidUpdate і робити запит на бекенд потрібно в Арр 
-            Достатньо однієї умови для запиту 
-            componentDidUpdate(prevProps, prevState){ if(this.state.page !== prevState.page || this.state.query!== prevState.query ){ fetch() } } 
-            Функція для запиту повинна бути в окремому файлі, в Арр її лише викликаємо 
-            Коли на бекенді закінчилися фото, приховуємо кнопку “Load more” 
-            Для перевірки можна використовувати слова для пошуку “min” “max” 
-            Один із варіантів реалізації приховування кнопки 
-            “Load more” this.steState(prev =>({ images: [...prev.images, ...hits], loadMore: this.state.page < Math.ceil(totalHits / 12 ) })) 
-            Не забуваємо коректно опрацьовувати слухача для клавіатури в компоненті модального вікна. */}
       </div>
     );
   }

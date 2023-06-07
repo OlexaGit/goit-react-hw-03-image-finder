@@ -6,7 +6,6 @@ const imageType = 'photo';
 const orientation = 'horizontal';
 
 export const getGallery = async (search, page) => {
-  console.log(page);
   const { data } = await axios.get(
     `https://pixabay.com/api/?q=${search}&page=${page}&key=${myApiKey}&image_type=${imageType}&orientation=${orientation}&per_page=${per_page}`
   );
